@@ -1,17 +1,11 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import { addWishlistItem } from '../_actions/wishlist';
+import { useRouter } from 'next/navigation';
 
-interface AddWishlistItemModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const AddWishlistItemModal: FC<AddWishlistItemModalProps> = ({
-  isOpen,
-  onClose,
-}) => {
+const AddItemPage = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -30,14 +24,8 @@ const AddWishlistItemModal: FC<AddWishlistItemModalProps> = ({
 
       if (!result.success) throw result.error;
 
-      // Reset form and close modal
-      setFormData({
-        name: '',
-        description: '',
-        price: '',
-        priority: 'LOW',
-      });
-      onClose();
+      // Redirect to wishlist page after successful submission
+      router.push('/wishlist');
     } catch (error) {
       console.error('Error adding wishlist item:', error);
       // You might want to show an error message to the user here
@@ -56,13 +44,11 @@ const AddWishlistItemModal: FC<AddWishlistItemModalProps> = ({
     }));
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4">Add Wishlist Item</h2>
+    <div className="container mx-auto max-w-2xl px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6">Add Wishlist Item</h1>
 
+      <div className="bg-white p-6 rounded-lg shadow-md">
         <form action={handleSubmit} className="space-y-4">
           <div>
             <label
@@ -146,7 +132,7 @@ const AddWishlistItemModal: FC<AddWishlistItemModalProps> = ({
           <div className="flex justify-end space-x-3 mt-6">
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => router.back()}
               className="px-4 py-2 border border-gray-300 rounded-md text-gray-700"
             >
               Cancel
@@ -164,4 +150,4 @@ const AddWishlistItemModal: FC<AddWishlistItemModalProps> = ({
   );
 };
 
-export default AddWishlistItemModal;
+export default AddItemPage;

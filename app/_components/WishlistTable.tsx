@@ -174,28 +174,6 @@ export function WishlistTable() {
     };
 
     fetchWishlistItems();
-
-    // Set up real-time subscription
-    const subscription = supabase
-      .channel('wishlist_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'wishlist_items',
-        },
-        (payload) => {
-          // Refresh the data when changes occur
-          fetchWishlistItems();
-        }
-      )
-      .subscribe();
-
-    // Cleanup subscription
-    return () => {
-      subscription.unsubscribe();
-    };
   }, []);
 
   // Handle delete item
