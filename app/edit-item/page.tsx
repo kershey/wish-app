@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { WishlistForm } from '@/app/_components/WishlistForm';
 import type { WishlistItem } from '@/app/_components/WishlistTable';
 
-export default function AddItemPage() {
+export default function EditItemPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const itemId = searchParams.get('id');
   const [initialData, setInitialData] = useState<
@@ -17,7 +18,7 @@ export default function AddItemPage() {
   useEffect(() => {
     const fetchItem = async () => {
       if (!itemId) {
-        setIsLoading(false);
+        router.push('/wishlist');
         return;
       }
 
@@ -31,22 +32,28 @@ export default function AddItemPage() {
         if (error) throw error;
         if (data) {
           setInitialData(data);
+        } else {
+          // If no item found, redirect to wishlist
+          router.push('/wishlist');
         }
       } catch (error) {
         console.error('Error fetching item:', error);
+        router.push('/wishlist');
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchItem();
-  }, [itemId]);
+  }, [itemId, router]);
 
   if (isLoading) {
     return <div className="container py-10 text-center">Loading...</div>;
   }
 
-  return (
-    <WishlistForm initialData={initialData} mode={itemId ? 'edit' : 'add'} />
-  );
+  if (!initialData) {
+    return null;
+  }
+
+  return <WishlistForm initialData={initialData} mode="edit" />;
 }
