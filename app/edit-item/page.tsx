@@ -1,12 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { WishlistForm } from '@/app/_components/WishlistForm';
 import type { WishlistItem } from '@/app/_components/WishlistTable';
 
 export default function EditItemPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EditItemContent />
+    </Suspense>
+  );
+}
+
+function EditItemContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const itemId = searchParams.get('id');
