@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { WishlistForm } from '@/app/_components/WishlistForm';
 import type { WishlistItem } from '@/app/_components/WishlistTable';
 
-export default function AddItemPage() {
+function AddItemPageClient() {
   const searchParams = useSearchParams();
   const itemId = searchParams.get('id');
   const [initialData, setInitialData] = useState<
@@ -48,5 +48,15 @@ export default function AddItemPage() {
 
   return (
     <WishlistForm initialData={initialData} mode={itemId ? 'edit' : 'add'} />
+  );
+}
+
+export default function AddItemPage() {
+  return (
+    <Suspense
+      fallback={<div className="container py-10 text-center">Loading...</div>}
+    >
+      <AddItemPageClient />
+    </Suspense>
   );
 }
