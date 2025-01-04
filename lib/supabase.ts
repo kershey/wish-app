@@ -1,23 +1,42 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-// Add this console.log to verify your environment variables are loaded
+// Validate environment variables
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Missing Supabase environment variables');
+  throw new Error(
+    'Missing environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be defined'
+  );
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-// Test the connection
+// Create Supabase client with additional options
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+  },
+  global: {
+    fetch: fetch.bind(globalThis),
+  },
+});
+
+// Test the connection and log detailed errors
 supabase
   .from('wishlist_items')
-  .select('*')
+  .select('count')
   .limit(1)
   .then(({ error }) => {
     if (error) {
-      console.error('Error connecting to Supabase:', error);
+      console.error('Supabase connection error:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+      });
     } else {
       console.log('Successfully connected to Supabase');
     }
+  })
+  .catch((err) => {
+    console.error('Failed to connect to Supabase:', err);
   });
