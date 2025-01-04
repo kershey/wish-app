@@ -22,21 +22,21 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 });
 
 // Test the connection and log detailed errors
-supabase
-  .from('wishlist_items')
-  .select('count')
-  .limit(1)
-  .then(({ error }) => {
-    if (error) {
-      console.error('Supabase connection error:', {
-        message: error.message,
-        details: error.details,
-        hint: error.hint,
-      });
-    } else {
-      console.log('Successfully connected to Supabase');
-    }
-  })
-  .catch((err) => {
-    console.error('Failed to connect to Supabase:', err);
-  });
+try {
+  const { error } = await supabase
+    .from('wishlist_items')
+    .select('count')
+    .limit(1);
+
+  if (error) {
+    console.error('Supabase connection error:', {
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+    });
+  } else {
+    console.log('Successfully connected to Supabase');
+  }
+} catch (err) {
+  console.error('Failed to connect to Supabase:', err);
+}
