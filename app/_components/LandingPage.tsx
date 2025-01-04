@@ -1,13 +1,7 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { CheckCircle, Gift, List, PenSquare, Plus, Trash2 } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { List, PenSquare, Plus, Trash2 } from 'lucide-react';
 
 export default function LandingPage() {
   return (

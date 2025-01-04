@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { WishlistTable } from '../_components/WishlistTable';
 import Link from 'next/link';
 

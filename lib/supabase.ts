@@ -14,7 +14,7 @@ supabase
   .from('wishlist_items')
   .select('*')
   .limit(1)
-  .then(({ data, error }) => {
+  .then(({ error }) => {
     if (error) {
       console.error('Error connecting to Supabase:', error);
     } else {
