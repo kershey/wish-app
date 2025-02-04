@@ -26,7 +26,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
@@ -193,13 +192,6 @@ export function WishlistTable() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem
-                  onClick={() => navigator.clipboard.writeText(wishlistItem.id)}
-                >
-                  Copy item ID
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>View details</DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() =>
                     router.push(`/edit-item?id=${wishlistItem.id}`)
